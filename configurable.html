@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Configurable</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+    <style type="text/css">
+      .ui-page {
+        background: #f60;
+        color: #fff;
+      }
+      .ui-bar-a {background: transparent; border: none; color: #fff; text-shadow: none;}
+      .ui-body-b {background: transparent; border: none;}
+      .ui-body-c {color: #fff; text-shadow: none;}
+      .ui-btn-up-d,
+      .ui-btn-hover-d,
+      .ui-btn-up-a,
+      .ui-btn-hover-a:hover {background: transparent; border: 1px solid #fff; box-shadow: none; color: #fff; font-weight: normal; text-transform: uppercase; text-shadow: none;}
+      .ui-btn-hover-d:hover,
+      .ui-btn-up-a {background: #fff; color: #f60;}
+    </style>
+  </head>
+  <body>
+    <div data-role="page" id="main">
+      <div data-role="header" class="jqm-header">
+        <h1>Find Me ...</h1>
+      </div>
+
+      <div data-role="content">
+        <div data-role="fieldcontain">
+          <label for="searchingFor" style="display: block; padding-bottom: 0.5em; width: 100%;">Whatcha wanna find?</label>
+          <textarea cols="40" rows="8" name="searchingFor" id="searchingFor" style="color: #000; width: 100%;"></textarea>
+        </div>
+
+        <div class="ui-body ui-body-b">
+          <fieldset class="ui-grid-a">
+              <div class="ui-block-a"><button type="submit" data-theme="d" id="b-cancel">Cancel</button></div>
+              <div class="ui-block-b"><button type="submit" data-theme="a" id="b-submit">Submit</button></div>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      function saveOptions() {
+        var options = {
+          'searchingFor': $("#searchingFor").val()
+        }
+        return options;
+      }
+
+      $(document).ready(function() {
+        var priorSearch = getURLVariable('searchingFor');
+        priorSearch = decodeURI(priorSearch);
+
+        if (priorSearch) {
+          $('#searchingFor').html(priorSearch);
+        }
+        $("#b-cancel").click(function() {
+          document.location = "pebblejs://close";
+        });
+        $("#b-submit").click(function() {
+          var location = "pebblejs://close#" + encodeURIComponent(JSON.stringify(saveOptions()));
+          document.location = location;
+        });
+      });
+
+      function getURLVariable(name) {
+        name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+        var regexS = "[\\?&]"+name+"=([^&#]*)",
+            regex = new RegExp(regexS),
+            results = regex.exec(window.location.href);
+        if (results == null) return "";
+        else return results[1];
+      }
+    </script>
+  </body>
+</html>
